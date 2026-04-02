@@ -1276,7 +1276,7 @@
             </div>
           </div> -->
 
-         <div class="col-lg-7">
+          <div class="col-lg-7">
   <div class="contact-form">
     <h3>Get In Touch</h3>
     <p>Fill out the form below and our team will get back to you as soon as possible.</p>
@@ -1318,7 +1318,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyyfflD0rL5K_3HbIdqPgqGJwPi8A_tUWtpbpgwpuKvD2uJ0mJN-hh-hbtFr6QXHy0u/exec"; // replace with your web app URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzvElWZSzmbpSl6XkHzj_zAuLq1za0ZH2hh1BXhdibKD_vt41Fe3iAkRnCQcAxWE8nXOw/exec"; // replace with your web app URL
   const form = document.getElementById("contactForm");
 
   form.addEventListener("submit", (e) => {
@@ -1339,11 +1339,15 @@
       .then(data => {
         loading.style.display = "none";
         if (data.result === "success") {
-          successMsg.style.display = "block"; // show alert div
+          successMsg.style.display = "block";
+          successMsg.textContent = "Your message has been successfully sent. Thank you for contacting us!";
+          successMsg.style.color = "white";
+          swal("Done", "Submitted Successfully.", "success");
           form.reset();
         } else {
           errorMsg.style.display = "block";
           errorMsg.textContent = "Something went wrong. Please try again!";
+          swal("Error", "Something went wrong. Please try again!", "error");
         }
       })
       .catch(error => {
