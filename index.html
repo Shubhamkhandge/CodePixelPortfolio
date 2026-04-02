@@ -1316,7 +1316,7 @@
 </div>
 
 <script>
-  const form = document.getElementById('contactForm');
+const form = document.getElementById('contactForm');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1337,7 +1337,7 @@ form.addEventListener('submit', async (e) => {
   };
 
   try {
-    const response = await fetch("YOUR_DEPLOYED_WEB_APP_URL", {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbwpQSbaGbjTVXr8Os9yew47Ni8r9MhSrUYyskAAy3LD1XrHzBzOfQswuWrOqjcfynMO/exec", { // <-- replace with your deployed URL
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -1345,11 +1345,10 @@ form.addEventListener('submit', async (e) => {
       }
     });
 
-    const resultText = await response.text(); // get the response text from Apps Script
+    const resultText = await response.text();
 
     loading.style.display = 'none';
 
-    // check if the response text is "Success"
     if (resultText.trim() === "Success") {
       sentMessage.style.display = 'block';
       form.reset();
