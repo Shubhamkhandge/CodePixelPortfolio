@@ -1276,82 +1276,61 @@
             </div>
           </div> -->
 
-          <div class="col-lg-7">
+         <div class="col-lg-7">
   <div class="contact-form">
     <h3>Get In Touch</h3>
     <p>Fill out the form below and our team will get back to you as soon as possible.</p>
 
     <form id="contactForm" class="php-email-form" action="#">
       <div class="row gy-4">
-
         <div class="col-md-6">
           <input type="text" name="name" class="form-control" placeholder="Your Name" required>
         </div>
-
         <div class="col-md-6">
           <input type="email" name="email" class="form-control" placeholder="Your Email" required>
         </div>
-
         <div class="col-12">
           <input type="text" name="subject" class="form-control" placeholder="Subject" required>
         </div>
-
         <div class="col-12">
           <textarea name="message" class="form-control" rows="6" placeholder="Message" required></textarea>
         </div>
-
-        <!-- hidden IP -->
-        <input type="hidden" name="ip" id="ip">
-
         <div class="col-12 text-center">
-          <div class="loading" style="display:none;">Please wait while your message is being sent...</div>
-          <div class="error-message text-danger"></div>
-          <div class="sent-message alert alert-success" style="display:none;">
-            Your message has been successfully sent. Thank you for contacting us!
-          </div>
-
           <button type="submit" class="btn">Send Message</button>
         </div>
-
       </div>
     </form>
   </div>
 </div>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxPfW8oNpHiMMUpOUHu5LSTuXJyLcf6HYgOvWQifg_jLQLFb6HzK1y0M8N2RBfIFp-eaw/exec";
-const form = document.getElementById("contactForm");
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("contactForm");
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyZV89QLC6tKamsimOuf4GcCSgG2BHR2IsCA13Nh6wpvvWZGLWBLourvM6jaedNw3r3gA/exec"; // replace with your Web App URL
 
-// ✅ Get IP
-fetch("https://api.ipify.org?format=json")
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("ip").value = data.ip;
-  });
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+    const formData = new FormData(form); // send form data directly
 
-  const formData = new URLSearchParams(new FormData(form));
-
-  fetch(scriptURL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.result === "success") {
-      swal("Success!", "Message sent successfully!", "success");
-      form.reset();
-    } else {
-      swal("Error!", "Something went wrong!", "error");
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    swal("Error!", "Failed to submit!", "error");
+    fetch(scriptURL, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.result === "success") {
+        swal("Success!", "Message sent successfully!", "success");
+        form.reset();
+      } else {
+        swal("Error!", "Submission failed! " + (data.error || ""), "error");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      swal("Error!", "Submission failed!", "error");
+    });
   });
 });
 </script>
