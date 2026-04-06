@@ -1300,6 +1300,9 @@
           <textarea name="message" class="form-control" rows="6" placeholder="Message" required></textarea>
         </div>
 
+        <!-- hidden IP -->
+        <input type="hidden" name="ip" id="ip">
+
         <div class="col-12 text-center">
           <div class="loading" style="display:none;">Please wait while your message is being sent...</div>
           <div class="error-message text-danger"></div>
@@ -1318,45 +1321,39 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzvElWZSzmbpSl6XkHzj_zAuLq1za0ZH2hh1BXhdibKD_vt41Fe3iAkRnCQcAxWE8nXOw/exec"; // replace with your web app URL
-  const form = document.getElementById("contactForm");
+const scriptURL = "https://script.google.com/macros/s/AKfycbxPfW8oNpHiMMUpOUHu5LSTuXJyLcf6HYgOvWQifg_jLQLFb6HzK1y0M8N2RBfIFp-eaw/exec";
+const form = document.getElementById("contactForm");
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const loading = form.querySelector(".loading");
-    const errorMsg = form.querySelector(".error-message");
-    const successMsg = form.querySelector(".sent-message");
-
-    loading.style.display = "block";
-    errorMsg.style.display = "none";
-    successMsg.style.display = "none";
-
-    const formData = new FormData(form);
-
-    fetch(scriptURL, { method: "POST", body: formData })
-      .then(response => response.json())
-      .then(data => {
-        loading.style.display = "none";
-        if (data.result === "success") {
-          successMsg.style.display = "block";
-          successMsg.textContent = "Your message has been successfully sent. Thank you for contacting us!";
-          successMsg.style.color = "white";
-          swal("Done", "Submitted Successfully.", "success");
-          form.reset();
-        } else {
-          errorMsg.style.display = "block";
-          errorMsg.textContent = "Something went wrong. Please try again!";
-          swal("Error", "Something went wrong. Please try again!", "error");
-        }
-      })
-      .catch(error => {
-        loading.style.display = "none";
-        errorMsg.style.display = "block";
-        errorMsg.textContent = "Something went wrong. Please try again!";
-        swal("Error", "Something went wrong. Please try again!", "error");
-      });
+// ✅ Get IP
+fetch("https://api.ipify.org?format=json")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("ip").value = data.ip;
   });
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const formData = new URLSearchParams(new FormData(form));
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.result === "success") {
+      swal("Success!", "Message sent successfully!", "success");
+      form.reset();
+    } else {
+      swal("Error!", "Something went wrong!", "error");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    swal("Error!", "Failed to submit!", "error");
+  });
+});
 </script>
         </div>
 
